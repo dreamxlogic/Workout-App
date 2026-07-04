@@ -1,0 +1,22 @@
+{
+  "nav": "A", "hero": "A", "wkHeader": "A", "scrHeader": "A",
+  "btnPrimary": "B", "btnGroup": "B", "btnAdd": "B", "btnCircle": "A",
+  "filterPill": "A", "muscleTag": "A", "recent": "B", "machineTile": "A",
+  "upNext": "B", "stat": "A", "coachTip": "A", "badge": "B",
+  "week": "A", "setRow": "A", "search": "A", "addSet": "A",
+  "faces": "A", "empty": "A", "summary": "A", "summaryRow": "A",
+  "finishCTA": "A", "complete": "A", "planCard": "A", "createPlan": "A",
+  "planBuilderRow": "A", "historyStats": "A", "calendar": "A", "historyRow": "A",
+  "helpSection": "A", "targetMuscle": "B", "muscleMap": "B", "toggle": "A",
+  "segmented": "A", "defaultCarousel": "A", "badgeGrid": "A", "avatarPicker": "B",
+  "onboard": "B", "toast": "B", "sheet": "B", "menu": "B", "listRow": "B",
+  "v5Locked": {
+    "navigation": "Light Sculpted Rail",
+    "homeHero": "Soft Color Blocks",
+    "homeWorkoutCard": "Clean Float",
+    "workout": "Sculpted Stage",
+    "info": "Editorial Guide + Safety Tip",
+    "exerciseHistory": "Progress Sheet",
+    "assetTreatment": "Transparent cutout compositing"
+  }
+}
