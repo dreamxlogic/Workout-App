@@ -1,5 +1,5 @@
 /* ============================================================================
-   avatars.js  —  6 illustrated avatars (SVG, theme-aware tops, swappable)
+   avatars.js ,  6 illustrated avatars (SVG, theme-aware tops, swappable)
    ----------------------------------------------------------------------------
    Built to spec:
      - all 6 share one style + proportions, each has a distinct face + hair

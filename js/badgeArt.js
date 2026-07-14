@@ -1,15 +1,15 @@
 /* ============================================================================
-   badgeArt.js  —  Illustrated medal artwork (vector, illustration-style)
+   badgeArt.js ,  Illustrated medal artwork (vector, illustration-style)
    ----------------------------------------------------------------------------
    BADGE_ART(medal, opts) -> svg string of a glossy medal with laurel leaves,
-   star/emblem, ribbon tails and a shine highlight — styled to look illustrated
+   star/emblem, ribbon tails and a shine highlight, styled to look illustrated
    (gradients + depth), not flat geometry.
      medal   "gold" | "silver" | "bronze"
      opts.center   icon key for the emblem in the middle (default "star")
      opts.confetti true to add festive confetti (earned pop-up)
      opts.ribbon   ribbon colour (default theme accent via CSS var)
    SWAP-IN: if you later drop a painted PNG at images/badges/{id}.png, call
-   BADGE_IMG(id) instead — see app.js badge rendering.
+   BADGE_IMG(id) instead, see app.js badge rendering.
    ========================================================================== */
 (function () {
   var METALS = {

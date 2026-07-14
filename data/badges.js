@@ -1,5 +1,5 @@
 /* ============================================================================
-   badges.js  —  Badge definitions + earn rules  (V4, tiered)
+   badges.js ,  Badge definitions + earn rules  (V4, tiered)
    ----------------------------------------------------------------------------
    Each badge:
      id, name, emblem (vector center icon), blurb, why, how
@@ -11,7 +11,7 @@
    The highest met tier is the badge's current level (see app.js badgeLevel()).
    Medal colors are fixed (gold/silver/bronze) and never themed.
 
-   IMAGES (optional — vector medal art is the fallback):
+   IMAGES (optional, vector medal art is the fallback):
      single badge  -> images/badges/{id}.png
      tiered badge  -> images/badges/{id}-bronze.png / -silver.png / -gold.png
    ========================================================================== */
@@ -23,7 +23,7 @@ window.BADGES = [
   {
     id: "first-workout", name: "First Workout", emblem: "star",
     blurb: "You logged and saved your very first workout.",
-    why: "Starting is the hardest part — and you did it.",
+    why: "Starting is the hardest part, and you did it.",
     how: "Save one completed workout.",
     progress: function (s) { return s.workoutCount; },
     tiers: [ T("gold", 1, "Earned") ]
@@ -63,7 +63,7 @@ window.BADGES = [
   {
     id: "comeback-kid", name: "Comeback Kid", emblem: "flame",
     blurb: "You came back after time away.",
-    why: "Restarting after a break is a real win — most people don't.",
+    why: "Restarting after a break is a real win, most people don't.",
     how: "Log a workout after 14 or more days away.",
     progress: function (s) { return s.comeback; },
     tiers: [ T("bronze", 1, "Earned") ]
@@ -79,7 +79,7 @@ window.BADGES = [
   {
     id: "personal-best", name: "Personal Best", emblem: "star",
     blurb: "You beat your old top weight on a machine.",
-    why: "Progressive overload — lifting more over time — is how you grow.",
+    why: "Progressive overload, lifting more over time, is how you grow.",
     how: "Beat your previous best weight on any machine.",
     progress: function (s) { return s.personalBest; },
     tiers: [ T("gold", 1, "Earned") ]
@@ -129,7 +129,7 @@ window.BADGES = [
   {
     id: "heavy-lifter", name: "Heavy Lifter", emblem: "dumbbell",
     blurb: "Serious total weight moved.",
-    why: "Total volume — weight times reps — is a big-picture strength measure.",
+    why: "Total volume, weight times reps, is a big-picture strength measure.",
     how: "Lift 10,000, 50,000, then 150,000 lb in total.",
     progress: function (s) { return s.volumeTotal; },
     tiers: [ T("bronze", 10000, "Strong"), T("silver", 50000, "Powerful"), T("gold", 150000, "Titan") ]

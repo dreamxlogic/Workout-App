@@ -1,9 +1,9 @@
 /* ============================================================================
-   icons.js  —  Inline SVG icon set (no emoji, no icon fonts)
+   icons.js ,  Inline SVG icon set (no emoji, no icon fonts)
    ----------------------------------------------------------------------------
    Usage:  ICON("home")  ->  returns an <svg> string that inherits currentColor.
    Stroke icons are 24x24, 1.9 stroke, rounded. Size them with CSS (width/height
-   on the .icon wrapper or font-size won't apply — set width/height).
+   on the .icon wrapper or font-size won't apply, set width/height).
    ========================================================================== */
 (function () {
   var S = function (body, opts) {
@@ -70,6 +70,7 @@
     user: S('<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/>'),
     shield: S('<path d="M12 3.5 19 6v5c0 5-3.2 7.8-7 9.5C8.2 18.8 5 16 5 11V6z"/>'),
     skip: S('<path d="M7 6v12M17 6 9 12l8 6z" fill="currentColor" stroke="none"/>'),
+    swap: S('<path d="M4 9h13M13 5l4 4-4 4M20 15H7M11 11l-4 4 4 4"/>'),
     cardio: S('<path d="M4 12h3l2-4 3 8 2-5 1.5 1H20"/>'),
     weight: S('<rect x="5" y="9" width="14" height="6" rx="2"/><path d="M9 7v10M15 7v10"/>'),
     flag: S('<path d="M6 21V4M6 4h11l-2 3 2 3H6"/>')

@@ -1,5 +1,5 @@
 /* ============================================================================
-   muscleMap.js — Raster anatomy maps with live theme-colored muscle overlays
+   muscleMap.js, Raster anatomy maps with live theme-colored muscle overlays
    ----------------------------------------------------------------------------
    The detailed body artwork is raster PNG, so the app no longer looks like a
    collection of vector body shapes. SVG is used only as a transparent color

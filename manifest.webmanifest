@@ -1,7 +1,7 @@
 {
-  "name": "Coach — Beginner Gym Tracker",
+  "name": "Coach: Beginner Gym Tracker",
   "short_name": "Coach",
-  "description": "A friendly beginner-first gym workout tracker. Log machines, sets, reps, weight and cardio — all saved on your phone.",
+  "description": "A friendly beginner-first gym workout tracker. Log machines, sets, reps, weight and cardio, all saved on your phone.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -9,7 +9,7 @@
   "background_color": "#EEEBF8",
   "theme_color": "#EC4899",
   "icons": [
-    { "src": "images/coach/coach-bust.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "images/coach/coach-bust.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    { "src": "images/coach/coach-hero.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "images/coach/coach-hero.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ]
 }
