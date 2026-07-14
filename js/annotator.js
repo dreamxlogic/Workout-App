@@ -15,7 +15,8 @@ var state = {
   drag:null,
   selected:null,
   notes:loadNotes(),
-  hover:null
+  hover:null,
+  zoom:loadZoom()
 };
 
 function loadNotes(){
@@ -33,6 +34,17 @@ function loadPosition(){
   }catch(e){
     return null;
   }
+}
+function loadZoom(){
+  try{
+    var raw = Number(localStorage.getItem("coachAnnotatorZoom"));
+    return raw ? clampZoom(raw) : 1;
+  }catch(e){
+    return 1;
+  }
+}
+function clampZoom(value){
+  return Math.max(0.6, Math.min(1.4, Math.round(Number(value || 1) * 100) / 100));
 }
 function saveNotes(){
   try{
@@ -151,7 +163,7 @@ function make(tag,attrs,children){
 function installStyles(){
   var style = document.createElement("style");
   style.textContent = [
-    "body.coach-ann-review-layout{--coach-ann-panel-open:min(40vw,520px);--coach-ann-panel-closed:168px;--coach-ann-phone-w:min(430px,calc((100dvh - 36px) * 0.4614),calc(100vw - var(--coach-ann-panel-open) - 44px));--coach-ann-phone-h:min(932px,calc(100dvh - 36px),calc((100vw - var(--coach-ann-panel-open) - 44px) * 2.1673));--coach-ann-phone-w-collapsed:min(430px,calc((100dvh - 36px) * 0.4614),calc(100vw - var(--coach-ann-panel-closed) - 44px));--coach-ann-phone-h-collapsed:min(932px,calc(100dvh - 36px),calc((100vw - var(--coach-ann-panel-closed) - 44px) * 2.1673))}",
+    "body.coach-ann-review-layout{--coach-ann-panel-open:min(40vw,520px);--coach-ann-panel-closed:168px;--coach-ann-active-panel-w:min(40vw,520px);--coach-ann-phone-w:383px;--coach-ann-phone-h:830px}",
     ".coach-ann-shell{position:fixed;inset:max(14px,env(safe-area-inset-top,0px)) 14px auto auto;z-index:2147483600;width:min(380px,calc(100vw - 28px));max-height:calc(100dvh - 28px - env(safe-area-inset-top,0px));display:flex;flex-direction:column;background:#fff;color:#241F33;border:1px solid #F0EDF6;border-radius:14px;box-shadow:0 18px 60px rgba(35,38,47,.24);font:13px/1.35 Inter,system-ui,sans-serif;overflow:hidden;touch-action:none}",
     ".coach-ann-shell.is-collapsed{width:auto;max-width:calc(100vw - 28px)}",
     ".coach-ann-shell.is-collapsed .coach-ann-body{display:none}",
@@ -163,6 +175,9 @@ function installStyles(){
     ".coach-ann-btn.primary{background:#7B5EA7;color:#fff}",
     ".coach-ann-btn.danger{background:#FBEAEA;color:#D24B4B}",
     ".coach-ann-btn.is-off{background:#F4F1F9;color:#6E6781}",
+    ".coach-ann-zoom{display:flex;align-items:center;gap:4px;padding:0 0 0 2px}",
+    ".coach-ann-zoom button{width:31px;height:31px;border:0;border-radius:999px;background:#F0EAFA;color:#5C3D8F;font-weight:900;font:inherit;cursor:pointer}",
+    ".coach-ann-zoom span{min-width:38px;text-align:center;color:#6E6781;font-size:12px;font-weight:850}",
     ".coach-ann-body{padding:12px;display:flex;flex-direction:column;gap:10px;overflow:auto;min-height:0}",
     ".coach-ann-muted{color:#6E6781;font-size:12px}",
     ".coach-ann-status{min-height:17px;color:#168F71;font-size:12px;font-weight:750}",
@@ -179,7 +194,7 @@ function installStyles(){
     ".coach-ann-highlight{position:fixed;z-index:2147483598;pointer-events:none;border:2px solid #7B5EA7;border-radius:10px;box-shadow:0 0 0 9999px rgba(35,38,47,.16);transition:all .08s ease}",
     ".coach-ann-pin{position:fixed;z-index:2147483599;width:24px;height:24px;border-radius:50%;background:#7B5EA7;color:#fff;display:flex;align-items:center;justify-content:center;font:800 12px/1 Inter,system-ui,sans-serif;box-shadow:0 6px 18px rgba(123,94,167,.35);pointer-events:none}",
     "body.coach-ann-armed *{cursor:crosshair !important}",
-    "@media (min-width:760px){body.coach-ann-review-layout{overflow:hidden !important;background:#F5F3FB !important}body.coach-ann-review-layout #phone{position:fixed !important;left:calc((100vw - var(--coach-ann-panel-open) - var(--coach-ann-phone-w)) / 2) !important;top:calc((100dvh - var(--coach-ann-phone-h)) / 2) !important;width:var(--coach-ann-phone-w) !important;height:var(--coach-ann-phone-h) !important;max-width:none !important;border-radius:30px !important;overflow:hidden !important;box-shadow:0 24px 70px rgba(35,38,47,.18),0 0 0 1px rgba(255,255,255,.8) !important}body.coach-ann-review-layout.coach-ann-panel-collapsed #phone{left:calc((100vw - var(--coach-ann-panel-closed) - var(--coach-ann-phone-w-collapsed)) / 2) !important;top:calc((100dvh - var(--coach-ann-phone-h-collapsed)) / 2) !important;width:var(--coach-ann-phone-w-collapsed) !important;height:var(--coach-ann-phone-h-collapsed) !important}body.coach-ann-review-layout .coach-ann-shell{left:auto !important;right:0 !important;top:0 !important;bottom:0 !important;width:var(--coach-ann-panel-open) !important;max-width:40vw !important;height:100dvh !important;max-height:none !important;border-radius:0 !important;border-width:0 0 0 1px !important;box-shadow:-18px 0 50px rgba(35,38,47,.12) !important;touch-action:auto}body.coach-ann-review-layout .coach-ann-shell.is-collapsed{width:var(--coach-ann-panel-closed) !important;max-width:var(--coach-ann-panel-closed) !important}body.coach-ann-review-layout .coach-ann-head{cursor:default}body.coach-ann-review-layout .coach-ann-body{flex:1}body.coach-ann-review-layout .coach-ann-list{flex:1;max-height:none;min-height:120px}}",
+    "@media (min-width:760px){body.coach-ann-review-layout{overflow:hidden !important;background:#F5F3FB !important}body.coach-ann-review-layout #phone{position:fixed !important;left:calc((100vw - var(--coach-ann-active-panel-w) - var(--coach-ann-phone-w)) / 2) !important;top:calc((100dvh - var(--coach-ann-phone-h)) / 2) !important;width:var(--coach-ann-phone-w) !important;height:var(--coach-ann-phone-h) !important;max-width:none !important;border-radius:30px !important;overflow:hidden !important;box-shadow:0 24px 70px rgba(35,38,47,.18),0 0 0 1px rgba(255,255,255,.8) !important}body.coach-ann-review-layout .coach-ann-shell{left:auto !important;right:0 !important;top:0 !important;bottom:0 !important;width:var(--coach-ann-panel-open) !important;max-width:40vw !important;height:100dvh !important;max-height:none !important;border-radius:0 !important;border-width:0 0 0 1px !important;box-shadow:-18px 0 50px rgba(35,38,47,.12) !important;touch-action:auto}body.coach-ann-review-layout .coach-ann-shell.is-collapsed{width:var(--coach-ann-panel-closed) !important;max-width:var(--coach-ann-panel-closed) !important}body.coach-ann-review-layout .coach-ann-head{cursor:default}body.coach-ann-review-layout .coach-ann-body{flex:1}body.coach-ann-review-layout .coach-ann-list{flex:1;max-height:none;min-height:120px}}",
     "@media (max-width:520px){.coach-ann-shell{left:10px;right:10px;width:auto}.coach-ann-head{gap:6px;padding:9px 10px}.coach-ann-title{font-size:12px}.coach-ann-btn{padding:7px 9px;font-size:12px}}"
   ].join("\n");
   document.head.appendChild(style);
@@ -189,6 +204,7 @@ function createPanel(){
   panel.innerHTML =
     '<div class="coach-ann-head">'+
       '<div class="coach-ann-title">Review notes</div>'+
+      '<div class="coach-ann-zoom" title="Preview zoom"><button data-act="zoom-out" aria-label="Zoom out">−</button><span data-zoom-label>100%</span><button data-act="zoom-in" aria-label="Zoom in">+</button></div>'+
       '<button class="coach-ann-btn" data-act="toggle">Annotate on</button>'+
       '<button class="coach-ann-btn" data-act="collapse">Collapse</button>'+
       '<button class="coach-ann-btn primary" data-act="export">Export</button>'+
@@ -233,6 +249,8 @@ function onPanelClick(event){
     setStatus(state.armed ? "Annotation mode is on. Tap an app element." : "Annotation mode is off. The app is clickable.");
   }
   if(act === "collapse") setCollapsed(!state.collapsed);
+  if(act === "zoom-in") setZoom(state.zoom + 0.1);
+  if(act === "zoom-out") setZoom(state.zoom - 0.1);
   if(act === "save") saveSelected();
   if(act === "export") download("workout-app-annotations.json", JSON.stringify(state.notes,null,2), "Exported JSON.");
   if(act === "copy") copyText(JSON.stringify(state.notes,null,2));
@@ -258,7 +276,26 @@ function setArmed(value){
 function setCollapsed(value){
   state.collapsed = !!value;
   localStorage.setItem("coachAnnotatorCollapsed", state.collapsed ? "1" : "0");
+  applyPreviewSize();
   renderMode();
+}
+function setZoom(value){
+  state.zoom = clampZoom(value);
+  localStorage.setItem("coachAnnotatorZoom", String(state.zoom));
+  applyPreviewSize();
+  renderMode();
+  drawPins();
+  if(state.hover) updateHighlight(state.hover);
+}
+function applyPreviewSize(){
+  var panelW = state.collapsed ? 168 : Math.min(window.innerWidth * 0.4, 520);
+  var availableW = Math.max(220, window.innerWidth - panelW - 44);
+  var baseH = Math.min(window.innerHeight * 0.9, availableW * 19.5 / 9);
+  var h = Math.max(360, baseH * state.zoom);
+  var w = h * 9 / 19.5;
+  document.body.style.setProperty("--coach-ann-active-panel-w", panelW+"px");
+  document.body.style.setProperty("--coach-ann-phone-h", h+"px");
+  document.body.style.setProperty("--coach-ann-phone-w", w+"px");
 }
 function renderMode(){
   var panel = document.querySelector(".coach-ann-shell");
@@ -267,12 +304,14 @@ function renderMode(){
   document.body.classList.toggle("coach-ann-panel-collapsed", state.collapsed);
   var toggle = panel.querySelector("[data-act='toggle']");
   var collapse = panel.querySelector("[data-act='collapse']");
+  var zoomLabel = panel.querySelector("[data-zoom-label]");
   if(toggle){
     toggle.textContent = state.armed ? "Annotate on" : "Annotate off";
     toggle.classList.toggle("is-off", !state.armed);
     toggle.setAttribute("aria-pressed", state.armed ? "true" : "false");
   }
   if(collapse) collapse.textContent = state.collapsed ? "Show panel" : "Collapse";
+  if(zoomLabel) zoomLabel.textContent = Math.round(state.zoom * 90)+"%";
 }
 function clampPosition(x,y,panel){
   var pad = 10;
@@ -404,8 +443,18 @@ function drawPins(){
   document.querySelectorAll(".coach-ann-pin").forEach(function(x){ x.remove(); });
   state.notes.forEach(function(note,i){
     var pin = make("div",{className:"coach-ann-pin "+SKIP,text:String(i+1)});
-    pin.style.left = (note.click.x - 12)+"px";
-    pin.style.top = (note.click.y - 12)+"px";
+    var x = note.click && note.click.x;
+    var y = note.click && note.click.y;
+    try{
+      var target = note.selector && document.querySelector(note.selector);
+      if(target){
+        var r = target.getBoundingClientRect();
+        x = r.left + Math.min(r.width - 8, Math.max(8, r.width / 2));
+        y = r.top + Math.min(r.height - 8, Math.max(8, r.height / 2));
+      }
+    }catch(e){}
+    pin.style.left = ((x || 0) - 12)+"px";
+    pin.style.top = ((y || 0) - 12)+"px";
     document.body.appendChild(pin);
   });
 }
@@ -502,6 +551,7 @@ function init(){
   localStorage.setItem("coachAnnotatorEnabled","1");
   document.body.classList.add("coach-ann-review-layout");
   installStyles();
+  applyPreviewSize();
   createPanel();
   setArmed(state.armed);
   document.addEventListener("mousemove",function(event){
@@ -530,6 +580,7 @@ function init(){
   },true);
   window.addEventListener("scroll", drawPins, true);
   window.addEventListener("resize",function(){
+    applyPreviewSize();
     drawPins();
     if(state.position) applyPosition(state.position.x,state.position.y);
   });
